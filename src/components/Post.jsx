@@ -8,6 +8,7 @@ import styles from "./Post.module.css";
 import { useState } from "react";
 
 export function Post({ author, publishedAt, content }) {
+  //comments should have an id to use on deleteComment and as a key prop
   const [comments, setComments] = useState(["Excelente dica"]);
   const [newCommentText, setNewCommentText] = useState("");
 
@@ -26,6 +27,13 @@ export function Post({ author, publishedAt, content }) {
     event.preventDefault();
     setComments([...comments, newCommentText]);
     setNewCommentText("");
+  }
+
+  function deleteComment(commentToDelete) {
+    const commentsWithoutDeletedOne = comments.filter((comment) => {
+      return comment !== commentToDelete;
+    });
+    setComments(commentsWithoutDeletedOne);
   }
 
   function handleNewCommentCHange(event) {
@@ -78,7 +86,13 @@ export function Post({ author, publishedAt, content }) {
       </form>
       <div className={styles.commentList}>
         {comments.map((comment) => {
-          return <Comment key={comment} content={comment} />;
+          return (
+            <Comment
+              key={comment}
+              content={comment}
+              onDeleteComment={deleteComment}
+            />
+          );
         })}
       </div>
     </article>
